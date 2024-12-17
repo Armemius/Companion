@@ -7,8 +7,10 @@ spring:
       formatSql: true
     showSql: true
   datasource:
-    url: jdbc:postgresql://localhost:5432/bebra
-    password: 358000
+    url: jdbc:postgresql://${POSTGRES_HOST}:5432/${POSTGRES_DB}
+    username: ${POSTGRES_USER}
+    password: ${POSTGRES_PASSWORD}
+    driver-class-name: org.postgresql.Driver
   ai:
     openai:
       api-key: ${OPENAI_KEY}
