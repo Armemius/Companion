@@ -32,4 +32,5 @@ public class ChatController {
         Prompt prompt = new Prompt(new UserMessage(message));
         return this.chatModel.stream(prompt);
     }
+
 }

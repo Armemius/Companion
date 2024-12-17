@@ -1,4 +1,7 @@
 package porunit.comp.data.domain;
 
-public class Status {
+public enum Status {
+    PENDING,
+    PAID,
+    CANCELED
 }
