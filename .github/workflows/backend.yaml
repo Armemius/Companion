@@ -57,6 +57,15 @@ jobs:
           export POSTGRES_USER=${{ vars.POSTGRES_USER }}
           export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
 
+      - name: Test env
+        run: |
+          echo $OPENAI_KEY
+          echo $HOST
+          echo $JWT_SECRET_KEY
+          echo $POSTGRES_DB
+          echo $POSTGRES_USER
+          echo $POSTGRES_PASSWORD
+
       - name: Cache Maven dependencies
         uses: actions/cache@v3
         with:
