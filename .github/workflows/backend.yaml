@@ -87,3 +87,44 @@ jobs:
       with:
         push: true
         tags: armemius/companion-app-backend:latest
+
+  sync-backend:
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Set up Git configuration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Checkout backend branch into 'backend' directory
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+          ref: backend
+          path: backend
+
+      - name: Remove unnessary files
+        run: |
+          rm -rf ./backend/.git
+          rm -rf ./backend/.github
+
+      - name: Commit changes
+        run: |
+          git add backend
+          git commit -m "Sync backend code to main/backend" || echo "No changes to commit"
+
+      - name: Push changes to main branch
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
