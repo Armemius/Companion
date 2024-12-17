@@ -50,21 +50,12 @@ jobs:
 
       - name: Set env
         run: |
-          export OPENAI_KEY=${{ secrets.OPENAI_KEY }}
-          export HOST=${{ vars.POSTGRES_HOST }}
-          export JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
-          export POSTGRES_DB=${{ vars.POSTGRES_DB }}
-          export POSTGRES_USER=${{ vars.POSTGRES_USER }}
-          export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
-
-      - name: Test env
-        run: |
-          echo $OPENAI_KEY
-          echo $HOST
-          echo $JWT_SECRET_KEY
-          echo $POSTGRES_DB
-          echo $POSTGRES_USER
-          echo $POSTGRES_PASSWORD
+          echo "OPENAI_KEY=${{ secrets.OPENAI_KEY }}" >> $GITHUB_ENV
+          echo "HOST=${{ vars.POSTGRES_HOST }}" >> $GITHUB_ENV
+          echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
+          echo "POSTGRES_DB=${{ vars.POSTGRES_DB }}" >> $GITHUB_ENV
+          echo "POSTGRES_USER=${{ vars.POSTGRES_USER }}" >> $GITHUB_ENV
+          echo "POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}" >> $GITHUB_ENV
 
       - name: Cache Maven dependencies
         uses: actions/cache@v3
