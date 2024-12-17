@@ -13,7 +13,7 @@ spring:
     driver-class-name: org.postgresql.Driver
   ai:
     openai:
-      api-key: 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
+      api-key: ${OPENAI_API}
       chat:
         options:
           model: gpt-3.5-turbo

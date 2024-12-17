@@ -18,7 +18,7 @@ import java.util.List;
 @Service
 @RequiredArgsConstructor
 public class UserService implements UserDetailsService {
-    //private final UserRepository userRepository;
+    private final UserRepository userRepository;
 
     private static List<GrantedAuthority> getAuthorities(List<Role> roles) {
         List<GrantedAuthority> authorities = new ArrayList<>();
@@ -30,13 +30,12 @@ public class UserService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-       // User user = userRepository.findFirstByUsername(username);
-       // if (user == null) {
-       //     throw new UsernameNotFoundException("User not found");
-        //}
-        //List<Role> roles = new ArrayList<>();
-        //roles.add(user.getUserRole());
-        return null;
-        //return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthorities(roles));
+        User user = userRepository.findFirstByUsername(username);
+        if (user == null) {
+            throw new UsernameNotFoundException("User not found");
+        }
+        List<Role> roles = new ArrayList<>();
+        roles.add(user.getUserRole());
+        return new org.springframework.security.core.userdetails.User(user.getUsername(), user.getPassword(), getAuthorities(roles));
     }
 }
