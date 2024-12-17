@@ -1,0 +1,89 @@
+name: Backend Tasks
+
+on:
+  push: { branches: [ main, backend-dev ] }
+  pull_request: { branches: [ main, backend-dev ] }
+
+jobs:
+  lint-markdown:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Install markdownlint-cli
+        run: npm install -g markdownlint-cli
+
+      - name: Lint Markdown files
+        run: markdownlint '**/*.md'
+
+  test:
+    runs-on: ubuntu-latest
+
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: ${{ vars.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ vars.POSTGRES_DB }}
+        ports:
+          - 5432:5432
+
+    needs: [ lint-markdown ]
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up JDK
+        uses: actions/setup-java@v3
+        with:
+          java-version: "17"
+          distribution: "temurin"
+
+      - name: Set env
+        run: |
+          export OPENAI_KEY=${{ secrets.OPENAI_KEY }}
+          export HOST=${{ vars.POSTGRES_HOST }}
+          export JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}
+          export POSTGRES_DB=${{ vars.POSTGRES_DB }}
+          export POSTGRES_USER=${{ vars.POSTGRES_USER }}
+          export POSTGRES_PASSWORD=${{ secrets.POSTGRES_PASSWORD }}
+
+      - name: Cache Maven dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2/repository
+          key: ${{ runner.os }}-maven-${{ hashFiles('**/*.java', '**/pom.xml') }}
+          restore-keys: |
+              ${{ runner.os }}-maven-
+  
+      - name: Run Maven tests
+        run: mvn test
+
+  build:
+    needs: test
+    
+    runs-on: ubuntu-latest
+    steps:
+    - name: Set up Docker Buildx
+      uses: docker/setup-buildx-action@v3
+    
+    - name: Login to Docker Hub
+      uses: docker/login-action@v3
+      with:
+        username: armemius
+        password: ${{ secrets.ARMEMIUS_DOCKERHUB_RW }}
+    
+    - name: Build and push
+      uses: docker/build-push-action@v6
+      with:
+        push: true
+        tags: armemius/companion-app-backend:latest

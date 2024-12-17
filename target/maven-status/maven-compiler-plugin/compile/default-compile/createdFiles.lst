@@ -1,0 +1,15 @@
+porunit\comp\CompApplication.class
+porunit\comp\data\domain\User.class
+porunit\comp\config\SecurityConfig.class
+porunit\comp\data\domain\Role.class
+porunit\comp\data\domain\Purchase.class
+porunit\comp\data\domain\PurchaseHistory.class
+porunit\comp\ChatController.class
+porunit\comp\data\domain\CompanionData.class
+porunit\comp\data\domain\Feedback.class
+porunit\comp\data\domain\Companion.class
+porunit\comp\data\domain\Message.class
+porunit\comp\data\domain\DialogSession.class
+porunit\comp\data\domain\Status.class
+porunit\comp\data\domain\UserData.class
+porunit\comp\data\domain\Comment.class
