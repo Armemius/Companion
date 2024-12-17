@@ -108,3 +108,43 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist
+  
+  sync-frontend:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout main branch
+        uses: actions/checkout@v3
+        with:
+          ref: main
+          persist-credentials: false
+
+      - name: Set up Git configuration
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+
+      - name: Checkout frontend branch into 'frontend' directory
+        uses: actions/checkout@v3
+        with:
+          repository: ${{ github.repository }}
+          ref: frontend
+          path: frontend
+
+      - name: Copy frontend code to main/frontend
+        run: |
+          mkdir -p frontend
+          cp -R frontend/* ./frontend/
+          rm -rf ./frontend/.github
+
+      - name: Commit changes
+        run: |
+          git add frontend
+          git commit -m "Sync frontend code to main/frontend" || echo "No changes to commit"
+
+      - name: Push changes to main branch
+        uses: ad-m/github-push-action@v0.6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          branch: main
