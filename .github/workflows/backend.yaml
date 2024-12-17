@@ -51,7 +51,7 @@ jobs:
       - name: Set env
         run: |
           echo "OPENAI_KEY=${{ secrets.OPENAI_KEY }}" >> $GITHUB_ENV
-          echo "HOST=${{ vars.POSTGRES_HOST }}" >> $GITHUB_ENV
+          echo "POSTGRES_HOST=${{ vars.POSTGRES_HOST }}" >> $GITHUB_ENV
           echo "JWT_SECRET_KEY=${{ secrets.JWT_SECRET_KEY }}" >> $GITHUB_ENV
           echo "POSTGRES_DB=${{ vars.POSTGRES_DB }}" >> $GITHUB_ENV
           echo "POSTGRES_USER=${{ vars.POSTGRES_USER }}" >> $GITHUB_ENV
