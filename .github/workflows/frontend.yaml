@@ -112,6 +112,8 @@ jobs:
   sync-frontend:
     needs: build
     runs-on: ubuntu-latest
+    permissions:
+      contents: write
 
     steps:
       - name: Checkout main branch
