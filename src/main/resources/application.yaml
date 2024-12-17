@@ -1,0 +1,17 @@
+spring:
+  application:
+    name: comp
+  jpa:
+    hibernate:
+      ddlAuto: create-drop
+      formatSql: true
+    showSql: true
+  datasource:
+    url: jdbc:postgresql://localhost:5432/bebra
+    password: 358000
+  ai:
+    openai:
+      api-key: ${OPENAI_KEY}
+      chat:
+        options:
+          model: gpt-3.5-turbo
