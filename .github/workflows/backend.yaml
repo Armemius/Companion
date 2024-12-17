@@ -1,8 +1,8 @@
 name: Backend Tasks
 
 on:
-  push: { branches: [ main, backend-dev ] }
-  pull_request: { branches: [ main, backend-dev ] }
+  push: { branches: [ main, backend, backend-pipeline ] }
+  pull_request: { branches: [ main, backend, backend-pipeline ] }
 
 jobs:
   lint-markdown:
