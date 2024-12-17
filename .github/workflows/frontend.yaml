@@ -132,10 +132,9 @@ jobs:
           ref: frontend
           path: frontend
 
-      - name: Copy frontend code to main/frontend
+      - name: Remove unnessary files
         run: |
-          mkdir -p frontend
-          cp -R frontend/* ./frontend/
+          rm -rf ./frontend/.git
           rm -rf ./frontend/.github
 
       - name: Commit changes
