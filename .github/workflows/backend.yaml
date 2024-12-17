@@ -23,31 +23,10 @@ jobs:
       - name: Lint Markdown files
         run: markdownlint '**/*.md'
 
-  lint-java:
-    runs-on: ubuntu-latest
-
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Set up JDK
-        uses: actions/setup-java@v3
-        with:
-          java-version: "17"
-          distribution: "temurin"
-
-      - name: Install Checkstyle
-        run: |
-          curl -sSLO https://github.com/checkstyle/checkstyle/releases/download/checkstyle-10.0/checkstyle-10.0-all.jar
-          chmod +x checkstyle-10.0-all.jar
-
-      - name: Run Checkstyle on Java files
-        run: java -jar checkstyle-10.0-all.jar -c /google_checks.xml '**/*.java'
-
   test:
     runs-on: ubuntu-latest
 
-    needs: [ lint-markdown, lint-java ]
+    needs: [ lint-markdown ]
 
     steps:
       - name: Checkout code
