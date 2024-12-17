@@ -84,6 +84,8 @@ jobs:
 
   deploy:
     needs: test
+    permissions:
+      contents: write
 
     runs-on: ubuntu-latest
     steps:
