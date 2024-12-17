@@ -70,4 +70,4 @@ jobs:
         uses: docker/build-push-action@v6
         with:
           push: true
-          tags: armemius/is-backend-lab-1:latest
+          tags: armemius/companion-app-backend:latest
