@@ -15,7 +15,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: "22"
 
       - name: Install markdownlint-cli
         run: npm install -g markdownlint-cli
@@ -33,7 +33,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: "22"
 
       - name: Install Dependencies
         run: npm install
@@ -54,7 +54,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: '22'
+          node-version: "22"
 
       - name: Install Dependencies
         run: npm install
@@ -81,3 +81,28 @@ jobs:
         with:
           push: true
           tags: armemius/companion-app-frontend:latest
+
+  deploy:
+    needs: test
+
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "22"
+
+      - name: Install Dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./dist
