@@ -1,0 +1,41 @@
+services:
+  db:
+    image: postgres:15
+    container_name: companion_app_db
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+      - ./init-users.sh:/docker-entrypoint-initdb.d/init-users.sh
+    ports:
+        - "5432:5432"
+
+  adminer:
+    image: adminer
+    container_name: companion_app_adminer
+    restart: always
+    ports:
+      - 8080:8080
+    environment:
+      ADMINER_DEFAULT_SERVER: db
+
+  frontend:
+    image: armemius/companion-app-frontend
+    container_name: companion_app_frontend
+    restart: always
+    ports:
+      - "3000:3000"
+
+  backend:
+    image: armemius/companion-app-backend
+    container_name: companion_app_backend
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - "3228:3228"
+    depends_on:
+      - db
+volumes:
+  pgdata:
