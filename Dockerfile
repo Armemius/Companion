@@ -1,5 +1,5 @@
 # Builder
-FROM maven:3.8.6-openjdk-17 AS build
+FROM maven:3.8.3-openjdk-17 AS build
 COPY --chown=maven:maven . /home/maven/project
 WORKDIR /home/maven/project
 
