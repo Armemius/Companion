@@ -2,6 +2,7 @@ import { writable } from "svelte/store";
 
 export type Authorization = {
   authorized: boolean;
+  balance: number;
   token: string;
   user: {
     id: string;

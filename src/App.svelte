@@ -4,12 +4,19 @@
   import Header from "./lib/components/Header.svelte";
 
   const basePath = import.meta.env.BASE_URL;
-  
 </script>
 
 <Router>
   <Header />
-  <main class="w-full p-4">
+  <main>
     <Route to={`${basePath}/`} component={Home} />
   </main>
 </Router>
+
+<style>
+  main {
+    padding: 55px 1rem 1rem 1rem;
+    min-height: 100vh;
+    min-width: 100%;
+  }
+</style>
