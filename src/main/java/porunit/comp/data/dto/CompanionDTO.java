@@ -6,7 +6,6 @@ import lombok.Data;
 @Data
 @Builder
 public class CompanionDTO {
-    private Integer companionId;
     private String name;
     private String icon;
     private Integer dataId;
