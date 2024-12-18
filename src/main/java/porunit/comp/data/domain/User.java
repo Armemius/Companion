@@ -10,20 +10,21 @@ import lombok.NoArgsConstructor;
 import java.util.List;
 
 
+
 @Entity
-@Table(name = "users")
-@Builder
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
+@Table(name = "users", uniqueConstraints = {@UniqueConstraint(columnNames = "login")})
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "user_id", nullable = false)
-    private Integer userId;
+    private Long id;
 
-    @Column(name = "login", length = 18, nullable = false)
+    @Column(name = "login", length = 18, nullable = false, unique = true)
     private String login;
 
     @Column(name = "username", length = 18, nullable = false)

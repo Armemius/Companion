@@ -1,15 +1,21 @@
 package porunit.comp.data.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Table(name = "feedback")
 @Data
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor
 public class Feedback {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     @Column(name = "feedback_id")
     private Integer feedbackId;
 
