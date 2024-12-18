@@ -33,6 +33,7 @@
   },
   "dependencies": {
     "carbon-components-svelte": "^0.87.0",
+    "carbon-icons-svelte": "^12.13.0",
     "svelte-routing": "^2.13.0"
   }
 }
