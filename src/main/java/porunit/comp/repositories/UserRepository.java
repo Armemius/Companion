@@ -7,5 +7,7 @@ import porunit.comp.data.domain.User;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {
-    User findFirstByUsername(String username);
+    User findFirstByLogin(String login);
+
+    boolean existsByLogin(String login);
 }
