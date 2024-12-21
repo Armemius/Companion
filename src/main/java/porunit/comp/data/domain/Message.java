@@ -1,13 +1,19 @@
 package porunit.comp.data.domain;
 
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "message")
 @Data
+@Builder
+@NoArgsConstructor
+@AllArgsConstructor
 public class Message {
 
     @Id
@@ -20,9 +26,8 @@ public class Message {
     private DialogSession session;
 
     @Column(name = "is_user", nullable = false)
-    private boolean isUser;
+    private Boolean isUser;
 
-    @Lob
     @Column(name = "data", nullable = false)
     private byte[] data;
 
