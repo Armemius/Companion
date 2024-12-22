@@ -12,6 +12,7 @@ public class Companion {
 
     @Id
     @Column(name = "companion_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer companionId;
 
     @Column(name = "name", length = 16, nullable = false)

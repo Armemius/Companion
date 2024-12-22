@@ -3,7 +3,7 @@ spring:
     name: comp
   jpa:
     hibernate:
-      ddlAuto: update
+      ddlAuto: create-drop
       formatSql: true
     showSql: true
   datasource:
@@ -17,3 +17,10 @@ spring:
       chat:
         options:
           model: gpt-3.5-turbo
+springdoc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    operations-sorter: method
