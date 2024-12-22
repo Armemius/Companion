@@ -1,27 +1,45 @@
 <script lang="ts">
-  import { onMount } from 'svelte';
-    import ROCKET_GIF from '../../assets/rocket.gif';
+  import { onMount } from "svelte";
+  import ROCKET_GIF from "../../assets/rocket.gif";
+  import { Button } from "carbon-components-svelte";
+  import { authStatusStore } from "../store/authorization";
+  import { navigate } from 'svelte-routing';
 
-    let rocketContainer: HTMLImageElement;
+  const basePath = import.meta.env.BASE_URL;
 
-    onMount(() => {
-        rocketContainer.src = "";
-        setTimeout(() => {
-            rocketContainer.src = ROCKET_GIF;
-        }, 1000);
-        setTimeout(() => {
-            rocketContainer.src = "";
-        }, 5700);
-    })
+  let rocketContainer: HTMLImageElement;
+
+  onMount(() => {
+    if ($authStatusStore?.authorized) {
+      navigate(`${basePath}/chats`);
+    }
+    rocketContainer.src = "";
+    setTimeout(() => {
+      rocketContainer.src = ROCKET_GIF;
+    }, 1000);
+    setTimeout(() => {
+      rocketContainer.src = "";
+    }, 5700);
+  });
 </script>
 
 <div class="container">
   <h3>Ваш персональный</h3>
   <h1>AI Companion</h1>
-  <span>Powered by ChatGPT</span>
+  <span class="appear-after-animation">Powered by ChatGPT</span>
+  <div class="appear-after-animation button-container">
+    {#if !$authStatusStore?.authorized}
+      <Button href={`${basePath}/auth?action=login`} kind="tertiary"
+        >Вход</Button
+      >
+      <Button href={`${basePath}/auth?action=register`} kind="tertiary"
+        >Регистрация</Button
+      >
+    {/if}
+  </div>
 </div>
 <div class="rocket">
-    <img src={ROCKET_GIF} bind:this={rocketContainer} alt="na kiev.gif" />
+  <img src={ROCKET_GIF} bind:this={rocketContainer} alt="na kiev.gif" />
 </div>
 
 <style>
@@ -39,9 +57,9 @@
     animation: fadeIn 0.6s 0.66s ease-in forwards;
   }
 
-  span {
+  .appear-after-animation {
     opacity: 0;
-    animation: fadeIn 0.1s 2.32s forwards;
+    animation: fadeIn 0.005s 3.62s forwards;
   }
 
   .container {
@@ -50,6 +68,13 @@
     justify-content: center;
     align-items: center;
     height: 50vh;
+  }
+
+  .button-container {
+    display: grid;
+    grid-template-columns: repeat(2, 150px);
+    gap: 10px;
+    padding: 15px;
   }
 
   .rocket {
@@ -62,6 +87,7 @@
     left: 0;
     right: 0;
     overflow: hidden;
+    pointer-events: none;
   }
 
   .rocket img {

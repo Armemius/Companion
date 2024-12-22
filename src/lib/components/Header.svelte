@@ -11,23 +11,34 @@
   import UserAvatar from "carbon-icons-svelte/lib/UserAvatar.svelte";
 
   import { authStatusStore } from "../store/authorization";
+  import { navigate } from "svelte-routing";
+
+  const basePath = import.meta.env.BASE_URL;
+
+  const handleLogout = () => {
+    authStatusStore.set(null);
+    navigate(basePath);
+  };
+
 </script>
 
 <Header company="AI Companion" platformName="v1.0">
   <HeaderUtilities>
     <HeaderAction
       icon={UserAvatar}
-      text={`Войти`}
+      text={$authStatusStore?.user.username ?? 'Войти'}
       on:click={(ev) => ev.stopPropagation()}
     />
-    <HeaderAction
-      icon={Wallet}
-      text={`${0}₽`}
-      on:click={(ev) => ev.stopPropagation()}
-    />
+    {#if $authStatusStore?.authorized}
+      <HeaderAction
+        icon={Wallet}
+        text={`Баланс: ${$authStatusStore.balance}₽`}
+        on:click={(ev) => ev.stopPropagation()}
+      />
+    {/if}
     <HeaderAction>
       <HeaderPanelDivider>Аккаунт</HeaderPanelDivider>
-      {#if authStatusStore}
+      {#if !$authStatusStore?.authorized}
         <HeaderPanelLink>Войти</HeaderPanelLink>
         <HeaderPanelLink>Зарегистрироваться</HeaderPanelLink>
       {:else}
@@ -35,7 +46,7 @@
         <HeaderPanelLink>Пополнить баланс</HeaderPanelLink>
         <HeaderPanelLink>Настройки</HeaderPanelLink>
         <HeaderPanelLink>Помощь</HeaderPanelLink>
-        <HeaderPanelLink>Выйти</HeaderPanelLink>
+        <HeaderPanelLink on:click={handleLogout}>Выйти</HeaderPanelLink>
       {/if}
 
       <HeaderPanelDivider>Информация</HeaderPanelDivider>
