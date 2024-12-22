@@ -10,6 +10,7 @@ public class CompanionData {
 
     @Id
     @Column(name = "data_id", nullable = false)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private Integer dataId;
 
     @Column(name = "data")
