@@ -4,12 +4,16 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import porunit.comp.data.domain.Companion;
 import porunit.comp.data.domain.CompanionData;
+import porunit.comp.data.domain.User;
 import porunit.comp.data.dto.CompanionDTO;
 import porunit.comp.data.dto.CompanionDataDTO;
 import porunit.comp.repositories.CompanionDataRepository;
 import porunit.comp.repositories.CompanionRepository;
+import porunit.comp.repositories.UserRepository;
 
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -17,6 +21,13 @@ public class CompanionService {
 
     private final CompanionRepository companionRepository;
     private final CompanionDataRepository companionDataRepository;
+    private final UserRepository userRepository;
+
+    public List<Integer> getAllCompanionsIds(String userLogin) {
+        User user = userRepository.findByLogin(userLogin).orElseThrow(() -> new RuntimeException("User not found"));
+        List<Companion> companions = companionRepository.findAllByAuthorId(Math.toIntExact(user.getId()));
+        return companions.stream().map(Companion::getCompanionId).collect(Collectors.toList());
+    }
 
     public CompanionDTO addCompanion(CompanionDTO companionDto) {
         Companion companion = toEntity(companionDto);
