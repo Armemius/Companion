@@ -29,20 +29,20 @@ public class SecurityConfig {
   @Bean
   public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
     return http
-            .csrf(AbstractHttpConfigurer::disable) // CSRF отключен
+            .csrf(AbstractHttpConfigurer::disable)
             .exceptionHandling(exception -> exception
                     .authenticationEntryPoint(authEntryPoint)
             )
             .sessionManagement(session -> session
-                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS) // Stateless сессии
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
                     .requestMatchers(new AntPathRequestMatcher("/ai/generate"),
                             new AntPathRequestMatcher("/orders/save")).authenticated()
                     .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAuthority(Role.ADMIN.name())
-                    .anyRequest().permitAll() // Остальные запросы разрешены
+                    .anyRequest().permitAll()
             )
-            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class) // JWT фильтр
+            .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
   }
 
