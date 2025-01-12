@@ -1,25 +1,22 @@
 package porunit.comp.controllers;
 
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import porunit.comp.data.dto.CompanionDTO;
 import porunit.comp.data.dto.CompanionDataDTO;
+import porunit.comp.services.AuthService;
 import porunit.comp.services.CompanionService;
 
 @RestController
 @RequestMapping("/companion")
+@RequiredArgsConstructor
 public class CompanionController {
 
     private final CompanionService companionService;
+    private final AuthService authService;
 
-    @Autowired
-    public CompanionController(CompanionService companionService) {
-        this.companionService = companionService;
-    }
 
     @PostMapping
     public ResponseEntity<CompanionDTO> addCompanion(@RequestBody CompanionDTO companionDto) {
@@ -32,4 +29,11 @@ public class CompanionController {
         CompanionDataDTO savedCompanionData = companionService.addCompanionData(companionDataDto);
         return ResponseEntity.ok(savedCompanionData);
     }
+
+    @GetMapping
+    public ResponseEntity<?> getAllCompanions(@RequestHeader("Authorization") String token) {
+        String login = authService.getLoginFromHeader(token);
+        return ResponseEntity.ok(companionService.getAllCompanionsIds(login));
+    }
+
 }
