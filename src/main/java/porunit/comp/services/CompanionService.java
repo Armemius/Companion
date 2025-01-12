@@ -1,5 +1,7 @@
 package porunit.comp.services;
 
+import jakarta.transaction.TransactionScoped;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import porunit.comp.data.domain.Companion;
@@ -29,8 +31,11 @@ public class CompanionService {
         return companions.stream().map(Companion::getCompanionId).collect(Collectors.toList());
     }
 
-    public CompanionDTO addCompanion(CompanionDTO companionDto) {
+    @Transactional
+    public CompanionDTO addCompanion(CompanionDTO companionDto, String login) {
+        User user = userRepository.findFirstByLogin(login);
         Companion companion = toEntity(companionDto);
+        companion.setAuthorId(Math.toIntExact(user.getId()));
         return toDto(companionRepository.save(companion));
     }
 
