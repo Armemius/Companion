@@ -4,6 +4,8 @@
   import { authStatusStore } from "../store/authorization";
   import { onMount } from "svelte";
   import { navigate } from "svelte-routing";
+  import type { stringify } from "postcss";
+  import { error, success } from "../notifications";
 
   const basePath = import.meta.env.BASE_URL;
 
@@ -17,15 +19,16 @@
     isLogin = urlParams.get("action") !== "register";
   });
 
-  const handleSubmit = async (ev) => {
-    ev.preventDefault();
-    if (isLogin) {
+  const processLogin = async (login: string, password: string) => {
+    try {
       const res = await api.post("/auth/login", { login, password });
-      const username = (await api.get("/auth/username", {
-        headers: {
-          Authorization: `Bearer ${res.data.token}`,
-        },
-      })).data;
+      const username = (
+        await api.get("/auth/username", {
+          headers: {
+            Authorization: `Bearer ${res.data.token}`,
+          },
+        })
+      ).data;
       const balance = 10000; // TODO
       authStatusStore.set({
         authorized: true,
@@ -33,11 +36,23 @@
         balance: balance,
         user: {
           login,
-          username, // TOFO
+          username,
         },
       });
-      navigate(basePath);
-    } else {
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+
+    return true;
+  };
+
+  const processRegister = async (
+    login: string,
+    username: string,
+    password: string
+  ) => {
+    try {
       const res = await api.post("/auth/register", {
         login,
         username,
@@ -53,7 +68,30 @@
           username,
         },
       });
-      navigate(basePath);
+    } catch (error) {
+      console.error(error);
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleSubmit = async (ev: Event) => {
+    ev.preventDefault();
+    if (isLogin) {
+      if (await processLogin(login, password)) {
+        navigate(basePath);
+        success("Успешно");
+      } else {
+        error("Ошибка авторизации");
+      }
+    } else {
+      if (await processRegister(login, username, password)) {
+        navigate(basePath);
+        success("Успешно");
+      } else {
+        error("Ошибка регистрации");
+      }
     }
   };
 </script>
@@ -80,16 +118,16 @@
             bind:value={username}
             id="username"
             labelText="Имя пользователя"
-            minlength="5"
-            maxlength="16"
+            minlength={5}
+            maxlength={16}
             required
           />
           <TextInput
             bind:value={login}
             id="login"
             labelText="Логин"
-            minlength="5"
-            maxlength="16"
+            minlength={5}
+            maxlength={16}
             required
           />
           <TextInput
@@ -97,8 +135,8 @@
             id="password"
             labelText="Пароль"
             type="password"
-            minlength="8"
-            maxlength="255"
+            minlength={8}
+            maxlength={255}
             required
           />
         </FormGroup>

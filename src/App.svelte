@@ -4,14 +4,15 @@
   import Authentication from "./lib/pages/Authentication.svelte";
   import Header from "./lib/components/Header.svelte";
   import { Theme } from "carbon-components-svelte";
-  
+  import { SvelteToast } from "@zerodevx/svelte-toast";
+
   const basePath = import.meta.env.BASE_URL;
 </script>
 
 <Theme
   theme="white"
   tokens={{
-    "interactive": "#020202",
+    interactive: "#020202",
     "interactive-01": "#020202",
     "interactive-02": "#020202",
     "interactive-03": "#020202",
@@ -19,7 +20,7 @@
     "link-01": "#020202",
     "link-02": "#020202e8",
     "inverse-link": "#020202e8",
-    "focus": "#020202",
+    focus: "#020202",
     "hover-primary": "#020202",
     "active-primary": "#020202e8",
     "hover-primary-text": "#020202",
@@ -29,13 +30,18 @@
 />
 
 <Header />
-  <main>
-    <Router basepath={basePath}>  
-      <Route path="auth" component={Authentication} />
-      <Route path="/" component={Home} />
-    </Router>
-  </main>
+<main>
+  <Router basepath={basePath}>
+    <Route path="auth" component={Authentication} />
+    <Route path="/" component={Home} />
+  </Router>
+</main>
 
+<SvelteToast
+  options={{
+    duration: 2000,
+  }}
+/>
 
 <style>
   main {

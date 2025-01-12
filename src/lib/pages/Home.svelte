@@ -29,7 +29,7 @@
   <span class="appear-after-animation">Powered by ChatGPT</span>
   <div class="appear-after-animation button-container">
     {#if !$authStatusStore?.authorized}
-      <Button href={`${basePath}/auth?action=login`} kind="tertiary"
+      <Button href={`${basePath}/auth?action=login`} kind="tertiary" style="padding: auto;"
         >Вход</Button
       >
       <Button href={`${basePath}/auth?action=register`} kind="tertiary"
@@ -73,8 +73,8 @@
   .button-container {
     display: grid;
     grid-template-columns: repeat(2, 150px);
-    gap: 10px;
-    padding: 15px;
+    gap: 15px;
+    padding: 35px;
   }
 
   .rocket {
