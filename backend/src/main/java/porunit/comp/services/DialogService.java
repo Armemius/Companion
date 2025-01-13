@@ -57,7 +57,7 @@ public class DialogService {
                 .orElseThrow(() -> new IllegalArgumentException("DialogSession not found"));
 
         Companion companion = session.getCompanion();
-        CompanionData companionData = companionDataRepository.findByCompanion(companion);
+        CompanionData companionData = companionDataRepository.findFirstByCompanion(companion);
         String messageData = messageDTO.getData();
 
         Message message = Message.builder()
