@@ -37,10 +37,8 @@ public class SecurityConfig {
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
             )
             .authorizeHttpRequests(auth -> auth
-                    .requestMatchers(new AntPathRequestMatcher("/ai/generate"),
-                            new AntPathRequestMatcher("/orders/save")).authenticated()
-                    .requestMatchers(new AntPathRequestMatcher("/admin/**")).hasAuthority(Role.ADMIN.name())
-                    .anyRequest().permitAll()
+                    .requestMatchers(new AntPathRequestMatcher("/auth/*")).permitAll()
+                    .anyRequest().authenticated()
             )
             .addFilterBefore(jwtAuthFilter, UsernamePasswordAuthenticationFilter.class)
             .build();
