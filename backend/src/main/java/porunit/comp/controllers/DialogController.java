@@ -26,7 +26,6 @@ public class DialogController {
 
     @PostMapping("/{sessionId}/messages")
     public ResponseEntity<?> createMessage(@PathVariable Long sessionId, @RequestBody MessageDTO messageDTO) {
-        System.out.println(messageDTO);
         return ResponseEntity.ok(dialogService.saveMessage(sessionId, messageDTO));
     }
 
