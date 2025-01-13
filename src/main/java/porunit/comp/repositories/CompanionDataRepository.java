@@ -6,4 +6,6 @@ import porunit.comp.data.domain.CompanionData;
 
 public interface CompanionDataRepository extends JpaRepository<CompanionData, Integer> {
     CompanionData findByCompanion(Companion companion);
+
+    CompanionData findFirstByCompanion(Companion companion);
 }

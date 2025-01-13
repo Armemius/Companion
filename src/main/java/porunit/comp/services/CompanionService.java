@@ -43,8 +43,12 @@ public class CompanionService {
     public CompanionDataDTO addCompanionData(CompanionDataDTO companionDataDto) {
         Companion companion = companionRepository.findById(companionDataDto.getCompanionId())
                 .orElseThrow(() -> new IllegalArgumentException("Companion not found with id: " + companionDataDto.getCompanionId()));
-
+        var compData = companionDataRepository.findFirstByCompanion(companion);
         CompanionData companionData = toEntity(companionDataDto);
+        if (compData != null) {
+            companionData.setData(companionData.getData() + compData.getData());
+            companionDataRepository.delete(compData);
+        }
         companionData.setCompanion(companion);
         return toDto(companionDataRepository.save(companionData));
     }
