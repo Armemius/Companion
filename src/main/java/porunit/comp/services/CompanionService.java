@@ -3,6 +3,7 @@ package porunit.comp.services;
 import jakarta.transaction.TransactionScoped;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.crossstore.ChangeSetPersister;
 import org.springframework.stereotype.Service;
 import porunit.comp.data.domain.Companion;
 import porunit.comp.data.domain.CompanionData;
@@ -26,7 +27,7 @@ public class CompanionService {
     private final UserRepository userRepository;
 
     public List<Integer> getAllCompanionsIds(String userLogin) {
-        User user = userRepository.findByLogin(userLogin).orElseThrow(() -> new RuntimeException("User not found"));
+        User user = userRepository.findByLogin(userLogin).orElseThrow(() -> new IllegalArgumentException("User not found"));
         List<Companion> companions = companionRepository.findAllByAuthorId(Math.toIntExact(user.getId()));
         return companions.stream().map(Companion::getCompanionId).collect(Collectors.toList());
     }
@@ -41,7 +42,7 @@ public class CompanionService {
 
     public CompanionDataDTO addCompanionData(CompanionDataDTO companionDataDto) {
         Companion companion = companionRepository.findById(companionDataDto.getCompanionId())
-                .orElseThrow(() -> new RuntimeException("Companion not found with id: " + companionDataDto.getCompanionId()));
+                .orElseThrow(() -> new IllegalArgumentException("Companion not found with id: " + companionDataDto.getCompanionId()));
 
         CompanionData companionData = toEntity(companionDataDto);
         companionData.setCompanion(companion);
@@ -50,26 +51,26 @@ public class CompanionService {
 
     public CompanionDTO getCompanionById(Integer id) {
         Companion companion = companionRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Companion not found with id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("Companion not found with id: " + id));
         return toDto(companion);
     }
 
     public CompanionDataDTO getCompanionDataById(Integer id) {
         CompanionData companionData = companionDataRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("CompanionData not found with id: " + id));
+                .orElseThrow(() -> new IllegalArgumentException("CompanionData not found with id: " + id));
         return toDto(companionData);
     }
 
     public void deleteCompanionById(Integer id) {
         if (!companionRepository.existsById(id)) {
-            throw new RuntimeException("Companion not found with id: " + id);
+            throw new IllegalArgumentException("Companion not found with id: " + id);
         }
         companionRepository.deleteById(id);
     }
 
     public void deleteCompanionDataById(Integer id) {
         if (!companionDataRepository.existsById(id)) {
-            throw new RuntimeException("CompanionData not found with id: " + id);
+            throw new IllegalArgumentException("CompanionData not found with id: " + id);
         }
         companionDataRepository.deleteById(id);
     }

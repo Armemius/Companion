@@ -15,22 +15,14 @@ public class BalanceController {
 
     @GetMapping
     public ResponseEntity<Integer> getBalance(@RequestHeader("Authorization") String token) {
-        try {
-            int balance = balanceService.getBalance(token);
-            return ResponseEntity.ok(balance);
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
-        }
+        int balance = balanceService.getBalance(token);
+        return ResponseEntity.ok(balance);
     }
 
     @PostMapping("/add")
     public ResponseEntity<String> addBalance(@RequestHeader("Authorization") String token,
                                              @RequestParam int amount) {
-        try {
-            balanceService.addBalance(token, amount);
-            return ResponseEntity.ok("Баланс успешно пополнен.");
-        } catch (IllegalArgumentException e) {
-            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
-        }
+        balanceService.addBalance(token, amount);
+        return ResponseEntity.ok("Баланс успешно пополнен.");
     }
 }
