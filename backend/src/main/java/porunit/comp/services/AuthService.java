@@ -22,6 +22,7 @@ public class AuthService {
                 .login(userDTO.getLogin())
                 .password(passwordEncoder.encode(userDTO.getPassword()))
                 .userRole(Role.USER)
+                .balance(0)
                 .build();
         userRepository.save(user);
     }

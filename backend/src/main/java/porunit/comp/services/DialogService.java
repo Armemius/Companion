@@ -61,14 +61,14 @@ public class DialogService {
         String messageData = messageDTO.getData();
 
         Message message = Message.builder()
-                .isUser(messageDTO.getIsUser())
+                .isUser(true)
                 .data(messageData.getBytes(StandardCharsets.UTF_8))
                 .time(LocalDateTime.now())
                 .session(session)
                 .build();
         messageRepository.save(message);
 
-        if(companionData == null || companionData.getData() == null) {
+        if (companionData == null || companionData.getData() == null) {
             String answer = aiMessageHandler.generateAnswer(messageData);
             Message aiMessage = Message.builder()
                     .isUser(false)
@@ -86,6 +86,19 @@ public class DialogService {
 
         List<Generation> aiResponse = aiMessageHandler.generateAnswer(messageData, companionMetaPrompt);
         System.out.println(aiResponse);
+        var userOpt = userRepository.findById(Long.valueOf(companion.getAuthorId()));
+        Message genMessage = Message.builder()
+                .isUser(false)
+                .data(aiResponse.get(0).getOutput().getContent().getBytes(StandardCharsets.UTF_8))
+                .time(LocalDateTime.now())
+                .session(session)
+                .build();
+
+        messageRepository.save(genMessage);
+        var user = userOpt.get();
+
+        user.setBalance(user.getBalance() - 50);
+        userRepository.save(user);
         return aiResponse;
     }
 
